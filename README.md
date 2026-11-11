@@ -1,113 +1,113 @@
 # comet-to-chrome-migrate
 
-Zieht Browserdaten von [Comet](https://comet.perplexity.ai/) (Perplexity) nach Chrome —
-weil Comet nur **Import** anbietet, aber keinen **Export**.
+Move your browser data out of [Comet](https://comet.perplexity.ai/) (Perplexity)
+and into Chrome — because Comet offers **import** and no **export** at all.
 
-Kein offizielles Tool von Perplexity oder Google. Inoffiziell, nutzt interne
-Chromium-Mechanismen (DevTools-Protokoll, Chromes eigenes
-Verschlüsselungsformat). Auf eigene Gefahr.
+Not affiliated with Perplexity or Google. It uses internal Chromium mechanisms
+(DevTools protocol, Chrome's own encryption format), so: use at your own risk.
 
-## Was migriert wird
+**[Landing page](https://usexless.github.io/comet-to-chrome-migrate/)** ·
+**[Download](https://github.com/usexless/comet-to-chrome-migrate/releases/latest)**
 
-| Daten                     | Weg                                                        | Automatisierung |
-|---------------------------|------------------------------------------------------------|-----------------|
-| Cookies / Login-Sitzungen | Lesen per CDP, Schreiben direkt in Chromes Cookie-DB (v10)  | voll automatisch |
-| Passwörter                | Autofill-Extraktion in Comet, Schreiben in Chromes Login-DB | voll automatisch |
-| Verlauf                   | Merge in Chromes `History`-DB                               | voll automatisch |
-| Downloads, Suchbegriffe   | Merge in Chromes `History`-DB                               | voll automatisch |
-| Autofill, Suchmaschinen   | Merge in Chromes `Web Data`-DB                              | voll automatisch |
+## What moves over
 
-Keine Dialoge, kein Klick, kein Windows Hello. Es wird **keine**
-Klartextdatei geschrieben — Passwörter und Cookies existieren nur im
-Arbeitsspeicher und liegen danach verschlüsselt in Chromes Datenbanken.
+| Data | How | Automation |
+|------|-----|------------|
+| Cookies / login sessions | Read over CDP, written into Chrome's cookie DB (v10) | fully automatic |
+| Passwords | Autofill extraction in Comet, written into Chrome's `Login Data` | fully automatic |
+| History | Merged into Chrome's `History` DB | fully automatic |
+| Downloads, search terms | Merged into Chrome's `History` DB | fully automatic |
+| Autofill, search engines | Merged into Chrome's `Web Data` DB | fully automatic |
 
-## Wie die Passwörter ohne Windows Hello rausgehen
+No dialogs, no clicking, no Windows Hello. **No plaintext file is ever
+written** — passwords and cookies exist only in memory and end up encrypted in
+Chrome's own databases.
 
-Zwei Dinge, die das möglich machen:
+## Quick start
 
-1. **Chromes „vor dem Ausfüllen erneut authentifizieren“** hängt auf Windows
-   nur an einem Pref (`password_manager.biometric_authentication_before_filling`,
-   Default: aus). Ein normaler Autofill-Vorgang löst deshalb keine
-   Hello-Abfrage aus. Der bei `chrome://password-manager/settings`
-   erzwungene Hello-Dialog ist ein separater Pfad und wird hier nie berührt.
-2. Comet bekommt auf der **Original-Origin** eine eigene Mini-Loginseite
-   ausgeliefert (CDP `Fetch.fulfillRequest`, ohne Netzwerk, ohne Redirects).
-   Ein `focus()` auf das Passwortfeld plus Pfeil-runter und Enter lässt Comet
-   das gespeicherte Passwort selbst ins Feld schreiben.
+1. Install [Node.js](https://nodejs.org/) 22 or newer (no npm packages needed).
+2. Start Comet and Chrome once so both profiles exist.
+3. Download the [latest release](https://github.com/usexless/comet-to-chrome-migrate/releases/latest)
+   and unpack it anywhere.
+4. Double-click **`Migrate everything.cmd`**.
 
-Der Wert wird im Speicher gelesen und sofort als v10-Blob mit Chromes
-DPAPI-Key (AES-256-GCM) verschlüsselt in Chromes `Login Data` geschrieben.
-Danach läuft eine Verifikation in einer Profilkopie: Chrome füllt die
-Einträge erneut aus, die Werte werden per SHA-256 verglichen.
+Prefer a window? Double-click **`Comet to Chrome.cmd`** and press
+**"Migrate everything"** — or migrate the three areas one at a time.
 
-Comets Profil wird dabei **nicht** verändert — nur gesichert.
-
-## Wie die Cookies nach Chrome kommen
-
-Chrome startet auf dem Standard-Profil nicht mit `--remote-debugging-port`
-(Sicherheitssperre), also kein CDP-Import möglich. Stattdessen schreibt das
-Tool die Cookies direkt in Chromes Cookie-DB, verschlüsselt mit Chromes
-eigenem Key aus `Local State` (`os_crypt.encrypted_key`, DPAPI).
-
-Wichtig: Chromes Cookie-Klartext ist `sha256(host_key) || wert`. Ohne dieses
-Host-Binding verwirft Chrome die Cookies beim nächsten Start.
-
-## Sicherheitsnetz
-
-- Vor jedem Lauf werden die betroffenen Dateien von Comet bzw. Chrome
-  gesichert (`%LOCALAPPDATA%\comet-chrome-migrate\backup\<zeitstempel>\`).
-- Nach dem Passwort-Import wird geprüft, dass Chromes `Login Data` nicht
-  geschrumpft ist; sonst wird das Backup zurückgespielt und abgebrochen.
-- Nach dem Cookie-Import: Roundtrip-Test (einen geschriebenen Wert
-  entschlüsseln und mit dem Original vergleichen).
-- Browser werden nur kurz und mit abgeschaltetem Sync/Update gestartet
-  (`--disable-sync --disable-background-networking --disable-component-update`,
-  Fenster außerhalb des Bildschirms).
-
-## Voraussetzungen
-
-- Windows
-- [Node.js](https://nodejs.org/) 22+ (nutzt `node:sqlite`, keine npm-Pakete)
-- Comet und Chrome installiert, beide je einmal gestartet
-
-## Benutzung
-
-**Ein Klick, alles:**
-
-Doppelklick auf **`Alles migrieren.cmd`** — Cookies, Passwörter, Verlauf und
-Autofill wandern in einem Durchgang nach Chrome. Fenster bleibt offen, bis
-alles durch ist.
-
-**Mit Oberfläche:**
-
-Doppelklick auf **`Comet nach Chrome.cmd`** (oder
-`powershell -ExecutionPolicy Bypass -File gui.ps1`) und dann auf
-**„Alles migrieren“** klicken. Die drei Einzelknöpfe darunter machen dasselbe
-stückweise.
-
-**Kommandozeile:**
+From a terminal:
 
 ```bash
-node migrate.js cookies      # Sitzungen
-node migrate.js passwords    # Passwörter
-node migrate.js history      # Verlauf, Downloads, Suchbegriffe, Autofill
-node migrate.js all          # alles nacheinander
+node migrate.js cookies      # sessions
+node migrate.js passwords    # passwords
+node migrate.js history      # history, downloads, search terms, autofill
+node migrate.js all          # everything, in that order
 ```
 
-Die Browser dürfen offen sein — das Tool schließt sie und startet sie
-kontrolliert neu.
+Both browsers may stay open: the tool closes them gracefully and restarts them
+when it needs to.
 
-## Grenzen
+## How passwords leave without Windows Hello
 
-- Nur das `Default`-Profil. Multi-Profil-Setups werden nicht erkannt.
-- Lesezeichen werden nicht migriert (Comet hat dafür keinen Export).
-- Passwort-Extraktion setzt voraus, dass Comets Autofill weiterhin
-  funktioniert; bricht Perplexity das Verhalten, werden Einträge
-  übersprungen und gezählt — nichts verschwindet still.
-- Cookies, die Chrome anders interpretiert (z. B. `SameSite=None` ohne
-  `Secure`), können abgelehnt werden; die Zahl der Fehlschläge wird
-  protokolliert.
+Two things make this work:
 
-## Lizenz
+1. Chrome's "re-authenticate before filling" is, on Windows, only a preference
+   (`password_manager.biometric_authentication_before_filling`, off by default).
+   A normal autofill therefore never triggers a Hello prompt. The forced dialog
+   on `chrome://password-manager/settings` is a separate code path and is never
+   touched here.
+2. Comet is served a tiny login page **on the original origin** via
+   `Fetch.fulfillRequest` — no network, no redirects. Focusing the password
+   field plus arrow-down and Enter makes Comet itself write the saved password
+   into the field.
 
-MIT, siehe [LICENSE](LICENSE).
+The value is read in memory and immediately encrypted as a v10 blob with
+Chrome's DPAPI key (AES-256-GCM) into Chrome's `Login Data`. Afterwards a
+verification run happens in a copy of the profile: Chrome fills the entries
+again and the values are compared by SHA-256.
+
+Comet's profile is **not** modified — only backed up.
+
+## How cookies get into Chrome
+
+Chrome refuses to start with `--remote-debugging-port` on the default profile,
+so a CDP import is impossible. Instead the tool writes the cookies straight into
+Chrome's cookie DB, encrypted with Chrome's own key from `Local State`
+(`os_crypt.encrypted_key`, DPAPI).
+
+Important: Chrome's cookie plaintext is `sha256(host_key) || value`. Without
+that host binding, Chrome silently drops every cookie on the next start.
+
+Session cookies (`has_expires = 0`) would be deleted the first time Chrome
+exits normally, so they are imported with a 30-day expiry instead. Otherwise
+every "keep me signed in" would be gone immediately.
+
+## Safety net
+
+- Every affected file from Comet and Chrome is backed up before a run, to
+  `%LOCALAPPDATA%\comet-chrome-migrate\backup\<timestamp>\`.
+- After the password import, Chrome's `Login Data` is checked for shrinkage;
+  if it shrank, the backup is restored and the run aborts.
+- After the cookie import, a roundtrip test decrypts one written value and
+  compares it with the original.
+- Browsers are only started briefly, with sync and background networking
+  disabled (`--disable-sync --disable-background-networking
+  --disable-component-update`), window off-screen.
+
+## Requirements
+
+- Windows
+- [Node.js](https://nodejs.org/) 22+ (uses the built-in `node:sqlite`)
+- Comet and Chrome installed, each started at least once
+
+## Limits
+
+- `Default` profile only. Multi-profile setups are not detected.
+- Bookmarks are not migrated (Comet has no export for them).
+- Password extraction depends on Comet's autofill still behaving; if Perplexity
+  changes it, entries are skipped and counted — nothing disappears silently.
+- Cookies Chrome interprets differently (e.g. `SameSite=None` without `Secure`)
+  may be rejected; failures are logged.
+
+## License
+
+MIT, see [LICENSE](LICENSE).
