@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-label="Comet to Chrome">
+  <defs>
+    <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.55" stop-color="#7CF2D6"/>
+      <stop offset="1" stop-color="#6EE7FF"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#20C4A0" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#20C4A0" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#6EE7FF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="blur" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="70"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="360" rx="24" fill="#08090C"/>
+  <rect width="1200" height="360" rx="24" fill="none" stroke="#1F242E" stroke-width="1.5"/>
+
+  <circle cx="210" cy="60" r="240" fill="#20C4A0" opacity="0.30" filter="url(#blur)"/>
+  <circle cx="1080" cy="330" r="220" fill="#6EE7FF" opacity="0.16" filter="url(#blur)"/>
+
+  <text x="72" y="96" font-family="Segoe UI, Arial, sans-serif" font-size="13" letter-spacing="4" fill="#8B93A3">UNOFFICIAL &#183; MIT &#183; WINDOWS</text>
+
+  <text x="68" y="182" font-family="Segoe UI, Arial, sans-serif" font-size="62" font-weight="800" letter-spacing="-1.5" fill="url(#grad)">Comet &#8594; Chrome</text>
+
+  <text x="72" y="224" font-family="Segoe UI, Arial, sans-serif" font-size="20" fill="#8B93A3">Your Comet life, now in Chrome. One click, fully automatic.</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#F2F4F7">
+    <rect x="72" y="258" width="112" height="34" rx="17" fill="#11141A" stroke="#1F242E"/>
+    <circle cx="92" cy="275" r="4" fill="#20C4A0"/>
+    <text x="106" y="280" fill="#ECEDEE">Cookies</text>
+
+    <rect x="196" y="258" width="130" height="34" rx="17" fill="#11141A" stroke="#1F242E"/>
+    <circle cx="216" cy="275" r="4" fill="#20C4A0"/>
+    <text x="230" y="280" fill="#ECEDEE">Passwords</text>
+
+    <rect x="338" y="258" width="176" height="34" rx="17" fill="#11141A" stroke="#1F242E"/>
+    <circle cx="358" cy="275" r="4" fill="#20C4A0"/>
+    <text x="372" y="280" fill="#ECEDEE">History &amp; autofill</text>
+  </g>
+
+  <g>
+    <rect x="680" y="76" width="446" height="238" rx="14" fill="#0A0C10" stroke="#1F242E"/>
+    <line x1="680" y1="112" x2="1126" y2="112" stroke="#191D25"/>
+    <circle cx="702" cy="94" r="5" fill="#2A303B"/>
+    <circle cx="718" cy="94" r="5" fill="#2A303B"/>
+    <circle cx="734" cy="94" r="5" fill="#2A303B"/>
+    <text x="770" y="99" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#8B93A3">Migrate everything.cmd</text>
+
+    <g font-family="Consolas, Menlo, monospace" font-size="13.5">
+      <text x="704" y="140" fill="#20C4A0">=== cookies started ===</text>
+      <text x="704" y="163" fill="#8B93A3">comet: 456 cookies from 141 hosts</text>
+      <text x="704" y="186" fill="#8B93A3">chrome: 459 cookies, 455 decrypted</text>
+      <text x="704" y="209" fill="#20C4A0">=== passwords started ===</text>
+      <text x="704" y="232" fill="#8B93A3">4/4 passwords, roundtrip verified</text>
+      <text x="704" y="255" fill="#20C4A0">=== history started ===</text>
+      <text x="704" y="278" fill="#8B93A3">670 urls, 1017 visits, 22 autofill</text>
+      <text x="704" y="300" fill="#6EE7FF">Done. Open Chrome and check.<tspan fill="#20C4A0"> &#9608;<animate attributeName="opacity" values="1;0;1" dur="1.2s" repeatCount="indefinite"/></tspan></text>
+    </g>
+  </g>
+
+  <rect x="0" y="358.5" width="1200" height="1.5" fill="url(#edge)" opacity="0.0"/>
+  <rect x="60" y="336" width="1080" height="2" rx="1" fill="url(#edge)" opacity="0.55"/>
+</svg>

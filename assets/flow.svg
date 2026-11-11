@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="230" viewBox="0 0 1200 230" role="img" aria-label="How the migration flows">
+  <defs>
+    <marker id="head" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#20C4A0"/>
+    </marker>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="45"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="230" rx="20" fill="#0A0C10" stroke="#1F242E"/>
+  <circle cx="150" cy="20" r="140" fill="#20C4A0" opacity="0.14" filter="url(#soft)"/>
+  <circle cx="1080" cy="220" r="140" fill="#6EE7FF" opacity="0.10" filter="url(#soft)"/>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <!-- boxes -->
+    <g>
+      <rect x="24"   y="72" width="196" height="64" rx="14" fill="#11141A" stroke="#1F242E"/>
+      <rect x="256"  y="72" width="196" height="64" rx="14" fill="#11141A" stroke="#1F242E"/>
+      <rect x="488"  y="72" width="196" height="64" rx="14" fill="#11141A" stroke="#20C4A0" stroke-opacity="0.55"/>
+      <rect x="720"  y="72" width="196" height="64" rx="14" fill="#11141A" stroke="#1F242E"/>
+      <rect x="952"  y="72" width="224" height="64" rx="14" fill="#11141A" stroke="#1F242E"/>
+    </g>
+
+    <!-- arrows -->
+    <g stroke="#20C4A0" stroke-width="1.6" opacity="0.85">
+      <line x1="222"  y1="104" x2="252"  y2="104" marker-end="url(#head)"/>
+      <line x1="454"  y1="104" x2="484"  y2="104" marker-end="url(#head)"/>
+      <line x1="686"  y1="104" x2="716"  y2="104" marker-end="url(#head)"/>
+      <line x1="918"  y1="104" x2="948"  y2="104" marker-end="url(#head)"/>
+    </g>
+
+    <!-- labels -->
+    <g text-anchor="middle" font-size="16" font-weight="600" fill="#F2F4F7">
+      <text x="122"  y="110">Comet profile</text>
+      <text x="354"  y="110">CDP read</text>
+      <text x="586"  y="110" fill="#7CF2D6">RAM only</text>
+      <text x="818"  y="110">Encrypted v10</text>
+      <text x="1064" y="110">Chrome DBs</text>
+    </g>
+
+    <!-- captions -->
+    <g text-anchor="middle" font-size="12.5" fill="#8B93A3">
+      <text x="122"  y="166">untouched, only backed up</text>
+      <text x="354"  y="166">DevTools protocol</text>
+      <text x="586"  y="166">no plaintext on disk</text>
+      <text x="818"  y="166">Chrome's own DPAPI key</text>
+      <text x="1064" y="166">Cookies &#183; Login Data &#183; History</text>
+    </g>
+
+    <text x="600" y="205" text-anchor="middle" font-size="12" letter-spacing="3" fill="#5F6674">NOTHING TOUCHES A SERVER &#183; NOTHING WRITES PLAINTEXT</text>
+  </g>
+</svg>
