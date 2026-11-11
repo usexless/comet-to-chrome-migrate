@@ -1,0 +1,22 @@
+# Backups and any transient output stay local
+backup/
+out/
+*.log
+*.hex
+*.bak
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS junk
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Local browser data, just in case someone copies a profile in here
+**/Local State
+**/Login Data*
+**/Cookies*
+**/History
+**/Web Data*
